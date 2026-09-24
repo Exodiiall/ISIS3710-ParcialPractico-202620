@@ -5,24 +5,31 @@ import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { getSession } from "@/services/session";
 import { getPlan, likePlan, Plan } from "@/services/plans";
+import { messages } from "@/i18n/messages";
 
 export default function PlanDetailPage() {
   const router = useRouter();
-  const { id } = useParams<{ id: string }>();
+  const { id, lang } = useParams<{ id: string; lang: string }>();
+  const t = messages[lang === "en" ? "en" : "es"].detail;
 
   // undefined = cargando, null = no existe
   const [plan, setPlan] = useState<Plan | null | undefined>(undefined);
   const [likes, setLikes] = useState(0);
   const [message, setMessage] = useState("");
+  const [loadError, setLoadError] = useState(false);
 
   // Cuando carga la página, le pedimos el plan al back
   useEffect(() => {
-    getPlan(id).then((data) => {
-      setPlan(data);
-      if (data) {
-        setLikes(data.likes);
-      }
-    });
+    getPlan(id)
+      .then((data) => {
+        setLoadError(false);
+        setPlan(data);
+
+        if (data) {
+          setLikes(data.likes);
+        }
+      })
+      .catch(() => setLoadError(true));
   }, [id]);
 
   async function handleLike() {
@@ -32,7 +39,7 @@ export default function PlanDetailPage() {
     const session = getSession();
 
     if (!session.id) {
-      router.push("/auth/login");
+      router.push(`/${lang}/auth/login`);
       return;
     }
 
@@ -44,7 +51,9 @@ export default function PlanDetailPage() {
       console.log(err);
     }
   }
-
+  if (loadError) {
+    return <p className="flex-1 bg-slate-50 px-20 py-6 text-slate-500">{t.loadError}</p>;
+  }
   if (plan === undefined) {
     return <p className="flex-1 bg-slate-50 px-20 py-6 text-slate-500">Cargando plan...</p>;
   }
@@ -57,8 +66,8 @@ export default function PlanDetailPage() {
     <div className="flex-1 bg-slate-50 px-20 py-6">
       {/* Barra de arriba */}
       <div className="flex justify-between items-center">
-        <Link href="/plans" className="text-slate-700">
-          ← Volver a planes
+        <Link href={`/${lang}/plans`} className="text-slate-700">
+          ← {t.backToPlans}
         </Link>
         
       </div>

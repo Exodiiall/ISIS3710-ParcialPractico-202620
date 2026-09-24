@@ -1,12 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { login } from "@/services/auth";
 import { saveSession } from "@/services/session";
+import { messages } from "@/i18n/messages";
 
 export default function LoginPage() {
   const router = useRouter();
+  const { lang } = useParams<{ lang: string }>();
+  const t = messages[lang === "en" ? "en" : "es"].loginPage;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -18,18 +21,18 @@ export default function LoginPage() {
     try {
       const user = await login(email, password);
       saveSession(user.id, user.userName);
-      router.push("/plans");
+      router.push(`/${lang}/plans`);
     } catch (err) {
-      setError("Correo o contraseña incorrectos");
+      setError(t.error);
       console.log(err);
     }
   }
 
   return (
     <div className="flex-1 flex flex-col items-center justify-center bg-slate-50">
-      <h1 className="text-5xl font-bold text-slate-900 mt-6">Inicia sesión</h1>
+      <h1 className="text-5xl font-bold text-slate-900 mt-6">{t.title}</h1>
       <p className="text-lg text-slate-600 mt-2">
-        Qué bueno verte de nuevo. Ingresa para ver tus planes.
+        {t.subtitle}
       </p>
 
       <form
@@ -37,7 +40,7 @@ export default function LoginPage() {
         className="bg-white rounded-2xl shadow-lg p-8 mt-10 w-full max-w-md"
       >
         <label htmlFor="email" className="block text-sm font-semibold text-slate-700">
-          Correo electrónico
+          {t.email}
         </label>
         <input
           id="email"
@@ -51,7 +54,7 @@ export default function LoginPage() {
         />
 
         <label htmlFor="password" className="block text-sm font-semibold text-slate-700 mt-4">
-          Contraseña
+          {t.password}
         </label>
         <input
           id="password"
@@ -70,7 +73,7 @@ export default function LoginPage() {
           type="submit"
           className="w-full bg-blue-700 text-white font-semibold rounded-xl py-4 mt-8"
         >
-          Iniciar sesión
+          {t.submit}
         </button>
       </form>
     </div>

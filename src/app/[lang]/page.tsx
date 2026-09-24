@@ -1,11 +1,38 @@
 import { messages } from "@/i18n/messages";
-export default function Home() {
-  const t = messages.es.home;
+import { notFound } from "next/navigation";
+import Link from "next/link";
+export default async function Home({
+  params,
+}: {
+  params: Promise<{ lang: string }>;
+}) {
+  const { lang } = await params;
+
+  if (lang !== "es" && lang !== "en") {
+    notFound();
+  }
+
+  const t = messages[lang].home;
+
   return (
     <div className="flex-1 flex flex-col items-center justify-center bg-slate-50 text-center">
+      <nav className="mb-6 flex gap-3">
+        <Link
+          href="/es"
+          className="rounded-lg border border-blue-700 bg-white px-4 py-2 font-semibold text-blue-700"
+        >
+        Español
+        </Link>
+        <Link
+          href="/en"
+          className="rounded-lg border border-blue-700 bg-white px-4 py-2 font-semibold text-blue-700"
+        >
+        English
+        </Link>
+      </nav>
       <span className="bg-blue-100 text-blue-700 text-xs font-bold rounded-full px-4 py-1">
         <span className="w-2 h-2 bg-orange-400 rounded-full inline-block mr-1"></span>
-        TU CIUDAD, HOY
+        {t.badge}
       </span>
 
       <h1 className="text-6xl font-bold text-slate-900 mt-8">
@@ -13,12 +40,11 @@ export default function Home() {
       </h1>
 
       <p className="text-lg text-slate-600 max-w-md mt-2">
-        Encuentra eventos espontáneos, actividades con amigos y nuevas
-        experiencias cerca de ti.
+        {t.description}
       </p>
 
       <form
-        action="/plans"
+        action={`/${lang}/plans`}
         className="flex items-center bg-white rounded-full shadow-lg p-2 mt-10 w-full max-w-md"
       >
         <svg
@@ -38,7 +64,7 @@ export default function Home() {
         <input
           type="text"
           name="search"
-          placeholder="Conciertos, cenas, escapadas..."
+          placeholder={t.placeholder}
           className="flex-1 px-3 outline-none"
         />
         <button
@@ -50,8 +76,7 @@ export default function Home() {
       </form>
 
       <p className="text-sm text-slate-600 mt-10">
-        <span className="text-green-700">✓</span> Sin reservas complicadas ni
-        ataduras
+        <span className="text-green-700">✓</span> {t.noReservations}
       </p>
     </div>
   );

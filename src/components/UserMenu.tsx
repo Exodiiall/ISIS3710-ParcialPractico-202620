@@ -3,15 +3,21 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { getSession, clearSession } from "@/services/session";
+import { usePathname } from "next/navigation";
+import { messages } from "@/i18n/messages";
 
 // Este componente solo se carga en el navegador (ver Header), por eso puede leer el localStorage.
 export default function UserMenu() {
   const router = useRouter();
+  const pathname = usePathname();
+  const lang =
+    pathname === "/en" || pathname.startsWith("/en/") ? "en" : "es";
+  const t = messages[lang].header;
   const session = getSession();
 
   function handleLogout() {
     clearSession();
-    router.push("/auth/login");
+    router.push(`/${lang}/auth/login`);
   }
 
   // Si hay un id guardado, el usuario inició sesión
@@ -19,7 +25,7 @@ export default function UserMenu() {
     return (
       <div className="flex items-center gap-6">
         <button className="bg-blue-600 text-white text-lg font-semibold rounded-xl px-6 py-3">
-          + Crear Plan
+          {t.createPlan}
         </button>
         <div className="flex items-center gap-3 border-l border-slate-200 pl-6">
           <svg
@@ -38,7 +44,7 @@ export default function UserMenu() {
           </svg>
           <span className="text-lg text-slate-700">{session.username}</span>
         </div>
-        <button onClick={handleLogout} title="Cerrar sesión" className="text-slate-500">
+        <button onClick={handleLogout} title={t.logout} className="text-slate-500">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -60,14 +66,14 @@ export default function UserMenu() {
 
   return (
     <div className="flex items-center gap-4">
-      <Link href="/auth/login" className="text-lg text-slate-700">
-        Iniciar sesión
+      <Link href={`/${lang}/auth/login`} className="text-lg text-slate-700">
+        {t.login}
       </Link>
       <Link
-        href="/auth/register"
+        href={`/${lang}/auth/register`}
         className="bg-blue-600 text-white text-lg font-semibold rounded-xl px-6 py-3"
       >
-        Registrarse
+        {t.register}
       </Link>
     </div>
   );

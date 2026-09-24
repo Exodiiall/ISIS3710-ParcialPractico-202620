@@ -1,8 +1,13 @@
 import Link from "next/link";
 import { getPlans } from "@/services/plans";
 
-export default async function PlansPage() {
-  const plans = await getPlans();
+export default async function PlansPage({
+    params,
+  }: {
+    params: Promise<{ lang: string }>;
+  }) {
+    const { lang } = await params;
+    const plans = await getPlans();
 
   return (
     <div className="flex-1 bg-slate-50 px-24 py-16">
@@ -10,7 +15,7 @@ export default async function PlansPage() {
 
       <div className="grid grid-cols-4 gap-8 mt-12">
         {plans.map((plan) => (
-          <Link key={plan.id} href={`/plans/${plan.id}`}>
+          <Link key={plan.id} href={`/${lang}/plans/${plan.id}`}>
             <img
               src={plan.image}
               alt={plan.name}
