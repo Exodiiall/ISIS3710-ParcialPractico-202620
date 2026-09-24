@@ -26,6 +26,13 @@ export const messages = {
         detail: {
             backToPlans: "Volver a planes",
             loadError: "No se pudo cargar el plan.",
+            loading: "Cargando plan...", missing: "Este plan no existe.", organizedBy: "Organizado por",
+            description: "Descripción del plan", recommendations: "Recomendaciones",
+            perPerson: "/ persona", duration: "Duración", minutes: "min aprox.",
+            like: "Me gustó", likeError: "No se pudo dar me gusta a este plan",
+            askHost: "Preguntar al anfitrión", cancelPolicy: "Cancelación gratuita hasta 24 horas antes del inicio.",
+            safe: "Experiencia segura y garantizada",
+            insurance: "Seguro de accidentes incluido para todos los participantes registrados.",
         },
         registerPage: {
             title: "Crea tu cuenta",
@@ -69,6 +76,13 @@ export const messages = {
         detail: {
             backToPlans: "Back to plans",
             loadError: "Could not load the plan.",
+            loading: "Loading plan...", missing: "This plan does not exist.", organizedBy: "Hosted by",
+            description: "Plan description", recommendations: "Recommendations",
+            perPerson: "/ person", duration: "Duration", minutes: "min approx.",
+            like: "Like", likeError: "Could not like this plan",
+            askHost: "Ask the host", cancelPolicy: "Free cancellation up to 24 hours before the start.",
+            safe: "Safe and guaranteed experience",
+            insurance: "Accident insurance included for all registered participants.",
         },
         registerPage: {
             title: "Create your account",

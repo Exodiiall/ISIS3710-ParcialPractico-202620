@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import { getSession } from "@/services/session";
 import { getPlan, likePlan, Plan } from "@/services/plans";
@@ -47,7 +48,7 @@ export default function PlanDetailPage() {
       await likePlan(id, session.id);
       setLikes(likes + 1);
     } catch (err) {
-      setMessage("No se pudo dar me gusta a este plan");
+      setMessage(t.likeError);
       console.log(err);
     }
   }
@@ -55,15 +56,15 @@ export default function PlanDetailPage() {
     return <p className="flex-1 bg-slate-50 px-20 py-6 text-slate-500">{t.loadError}</p>;
   }
   if (plan === undefined) {
-    return <p className="flex-1 bg-slate-50 px-20 py-6 text-slate-500">Cargando plan...</p>;
+    return <p role="status" className="flex-1 bg-slate-50 px-4 sm:px-20 py-6 text-slate-600">{t.loading}</p>;
   }
 
   if (plan === null) {
-    return <p className="flex-1 bg-slate-50 px-20 py-6 text-slate-500">Este plan no existe.</p>;
+    return <p className="flex-1 bg-slate-50 px-4 sm:px-20 py-6 text-slate-600">{t.missing}</p>;
   }
 
   return (
-    <div className="flex-1 bg-slate-50 px-20 py-6">
+    <main className="flex-1 bg-slate-50 px-4 py-6 sm:px-8 lg:px-20">
       {/* Barra de arriba */}
       <div className="flex justify-between items-center">
         <Link href={`/${lang}/plans`} className="text-slate-700">
@@ -72,14 +73,17 @@ export default function PlanDetailPage() {
         
       </div>
 
-      <div className="flex gap-8 mt-4">
+      <div className="flex flex-col lg:flex-row gap-8 mt-4">
         {/* Columna izquierda */}
-        <div className="flex-1">
+        <div className="min-w-0 flex-1">
           {/* Imagen */}
           <div className="relative">
-            <img
+            <Image
               src={plan.image}
               alt={plan.name}
+              width={1200}
+              height={700}
+              unoptimized
               className="w-full h-96 object-cover rounded-2xl"
             />
             <p className="absolute bottom-4 left-4 bg-white text-slate-900 font-semibold rounded-full px-4 py-1">
@@ -88,7 +92,7 @@ export default function PlanDetailPage() {
           </div>
 
           {/* Título */}
-          <div className="flex justify-between items-center bg-white rounded-2xl p-6 mt-8">
+          <div className="flex flex-wrap justify-between items-center gap-4 bg-white rounded-2xl p-6 mt-8">
             <div>
               <h1 className="text-4xl font-bold text-slate-900">{plan.name}</h1>
               {plan.creator && (
@@ -107,7 +111,7 @@ export default function PlanDetailPage() {
                       d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
                     />
                   </svg>
-                  Organizado por
+                  {t.organizedBy}
                   <span className="font-semibold text-slate-900 ml-1">{plan.creator.name}</span>
                   <span className="text-slate-500 ml-1">@{plan.creator.userName}</span>
                 </p>
@@ -135,32 +139,32 @@ export default function PlanDetailPage() {
 
           {/* Descripción */}
           <div className="bg-white rounded-2xl p-10 mt-8">
-            <h2 className="text-2xl text-slate-900">Descripción del plan</h2>
+            <h2 className="text-2xl text-slate-900">{t.description}</h2>
             <p className="text-lg text-slate-600 mt-4">{plan.description}</p>
           </div>
 
           {/* Recomendaciones */}
           <div className="bg-white rounded-2xl p-10 mt-8">
-            <h2 className="text-2xl text-slate-900">Recomendaciones</h2>
+            <h2 className="text-2xl text-slate-900">{t.recommendations}</h2>
             <p className="text-lg text-slate-600 mt-4">{plan.recomendations}</p>
           </div>
         </div>
 
         {/* Columna derecha */}
-        <div className="w-96">
+        <div className="w-full lg:w-96">
           {/* Precio e inscripción */}
           <div className="bg-white rounded-2xl shadow p-6">
             <div className="flex items-center gap-2">
               <p className="text-4xl font-bold text-slate-900">
                 ${plan.estimatedPrice.toLocaleString("es-CO")}
               </p>
-              <p className="text-sm text-slate-500">/ persona</p>
+              <p className="text-sm text-slate-600">{t.perPerson}</p>
             </div>
 
             <div className="border-t border-b border-slate-200 py-4 mt-6">
               <div className="flex justify-between">
-                <p className="text-slate-600">Duración</p>
-                <p className="font-semibold text-slate-900">{plan.estimatedTime} min aprox.</p>
+                <p className="text-slate-600">{t.duration}</p>
+                <p className="font-semibold text-slate-900">{plan.estimatedTime} {t.minutes}</p>
               </div>
             </div>
 
@@ -168,27 +172,27 @@ export default function PlanDetailPage() {
               onClick={handleLike}
               className="w-full bg-blue-700 text-white font-semibold rounded-xl py-4 mt-6"
             >
-              Me gustó
+              {t.like}
             </button>
             {message && <p className="text-sm text-red-600 mt-2">{message}</p>}
             <button className="w-full bg-blue-50 text-slate-900 rounded-xl py-3 mt-3">
-              Preguntar al anfitrión
+              {t.askHost}
             </button>
 
             <p className="text-sm text-slate-500 text-center mt-6">
-              Cancelación gratuita hasta 24 horas antes del inicio.
+              {t.cancelPolicy}
             </p>
           </div>
 
           {/* Experiencia segura */}
           <div className="bg-blue-50 rounded-2xl p-6 mt-8">
-            <p className="font-semibold text-slate-900">🛡️ Experiencia segura y garantizada</p>
+            <p className="font-semibold text-slate-900">🛡️ {t.safe}</p>
             <p className="text-sm text-slate-600 mt-2">
-              Seguro de accidentes incluido para todos los participantes registrados.
+              {t.insurance}
             </p>
           </div>
         </div>
       </div>
-    </div>
+    </main>
   );
 }

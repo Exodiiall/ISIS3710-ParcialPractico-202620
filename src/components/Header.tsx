@@ -15,11 +15,11 @@ export default function Header() {
   const t = messages[lang].header;
 
   return (
-    <header className="flex justify-between items-center bg-white border-b border-slate-200 px-24 py-4">
-      <div className="flex items-center gap-12">
+    <header className="flex flex-wrap justify-between items-center gap-4 bg-white border-b border-slate-200 px-4 py-4 sm:px-8 lg:px-24">
+      <div className="flex flex-wrap items-center gap-4 sm:gap-12">
         <Link href={`/${lang}`} className="flex items-center gap-3">
 
-          <span className="text-2xl font-bold text-slate-900">Planes Parcial</span>
+          <span className="text-xl sm:text-2xl font-bold text-slate-900">Planes Parcial</span>
         </Link>
 
         <Link href={`/${lang}/plans`} className="text-lg font-semibold text-blue-700">

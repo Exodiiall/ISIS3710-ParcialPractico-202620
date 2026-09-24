@@ -15,8 +15,8 @@ export default async function Home({
   const t = messages[lang].home;
 
   return (
-    <div className="flex-1 flex flex-col items-center justify-center bg-slate-50 text-center">
-      <nav className="mb-6 flex gap-3">
+    <main className="flex-1 flex flex-col items-center justify-center bg-slate-50 px-4 py-12 text-center">
+      <nav aria-label={lang === "es" ? "Idioma" : "Language"} className="mb-6 flex gap-3">
         <Link
           href="/es"
           className="rounded-lg border border-blue-700 bg-white px-4 py-2 font-semibold text-blue-700"
@@ -35,7 +35,7 @@ export default async function Home({
         {t.badge}
       </span>
 
-      <h1 className="text-6xl font-bold text-slate-900 mt-8">
+      <h1 className="text-4xl sm:text-6xl font-bold text-slate-900 mt-8">
         {t.title}
       </h1>
 
@@ -64,8 +64,9 @@ export default async function Home({
         <input
           type="text"
           name="search"
+          aria-label={lang === "es" ? "Buscar planes" : "Search plans"}
           placeholder={t.placeholder}
-          className="flex-1 px-3 outline-none"
+          className="min-w-0 flex-1 px-3"
         />
         <button
           type="submit"
@@ -78,6 +79,6 @@ export default async function Home({
       <p className="text-sm text-slate-600 mt-10">
         <span className="text-green-700">✓</span> {t.noReservations}
       </p>
-    </div>
+    </main>
   );
 }

@@ -1,69 +1,84 @@
+import { messages } from "@/i18n/messages";
+import { notFound } from "next/navigation";
 import Link from "next/link";
-import { getPlans } from "@/services/plans";
+export default async function Home({
+  params,
+}: {
+  params: Promise<{ lang: string }>;
+}) {
+  const { lang } = await params;
 
-export default async function PlansPage({
-    params,
-  }: {
-    params: Promise<{ lang: string }>;
-  }) {
-    const { lang } = await params;
-    const plans = await getPlans();
+  if (lang !== "es" && lang !== "en") {
+    notFound();
+  }
+
+  const t = messages[lang].home;
 
   return (
-    <div className="flex-1 bg-slate-50 px-24 py-16">
-      <h1 className="text-5xl font-bold text-slate-900">Explorar planes</h1>
+    <main className="flex-1 flex flex-col items-center justify-center bg-slate-50 px-4 py-12 text-center">
+      <nav aria-label={lang === "es" ? "Idioma" : "Language"} className="mb-6 flex gap-3">
+        <Link
+          href="/es"
+          className="rounded-lg border border-blue-700 bg-white px-4 py-2 font-semibold text-blue-700"
+        >
+        Español
+        </Link>
+        <Link
+          href="/en"
+          className="rounded-lg border border-blue-700 bg-white px-4 py-2 font-semibold text-blue-700"
+        >
+        English
+        </Link>
+      </nav>
+      <span className="bg-blue-100 text-blue-700 text-xs font-bold rounded-full px-4 py-1">
+        <span className="w-2 h-2 bg-orange-400 rounded-full inline-block mr-1"></span>
+        {t.badge}
+      </span>
 
-      <div className="grid grid-cols-4 gap-8 mt-12">
-        {plans.map((plan) => (
-          <Link key={plan.id} href={`/${lang}/plans/${plan.id}`}>
-            <img
-              src={plan.image}
-              alt={plan.name}
-              className="w-full h-60 object-cover rounded-xl"
-            />
-            <h2 className="text-2xl text-slate-900 mt-3">{plan.name}</h2>
-            <p className="flex items-center text-sm text-slate-500">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={2}
-                stroke="currentColor"
-                className="w-4 h-4 mr-1"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
-                />
-              </svg>
-              {plan.creator.name}
-            </p>
-            <div className="flex justify-between items-center mt-1">
-              <p className="text-slate-500">
-                Aproximado: ${plan.estimatedPrice}
-              </p>
-              <p className="flex items-center text-slate-500">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={2}
-                  stroke="currentColor"
-                  className="w-5 h-5 mr-1 text-red-500"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"
-                  />
-                </svg>
-                {plan.likes}
-              </p>
-            </div>
-          </Link>
-        ))}
-      </div>
-    </div>
+      <h1 className="text-4xl sm:text-6xl font-bold text-slate-900 mt-8">
+        {t.title}
+      </h1>
+
+      <p className="text-lg text-slate-600 max-w-md mt-2">
+        {t.description}
+      </p>
+
+      <form
+        action={`/${lang}/plans`}
+        className="flex items-center bg-white rounded-full shadow-lg p-2 mt-10 w-full max-w-md"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth={2}
+          stroke="currentColor"
+          className="w-5 h-5 ml-3 text-blue-700"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
+          />
+        </svg>
+        <input
+          type="text"
+          name="search"
+          aria-label={lang === "es" ? "Buscar planes" : "Search plans"}
+          placeholder={t.placeholder}
+          className="min-w-0 flex-1 px-3"
+        />
+        <button
+          type="submit"
+          className="bg-blue-600 text-white font-semibold rounded-full px-6 py-2"
+        >
+          {t.explore}
+        </button>
+      </form>
+
+      <p className="text-sm text-slate-600 mt-10">
+        <span className="text-green-700">✓</span> {t.noReservations}
+      </p>
+    </main>
   );
 }

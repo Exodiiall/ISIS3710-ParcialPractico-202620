@@ -1,4 +1,5 @@
-const API_URL = "http://localhost:8080";
+// La URL del back se configura en el archivo .env.local (ver .env.example)
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 // Envía el correo y la contraseña al back y devuelve los datos del usuario (id, userName...)
 export async function login(email: string, password: string) {

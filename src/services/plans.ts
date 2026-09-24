@@ -1,4 +1,5 @@
-const API_URL = "http://localhost:8080";
+// La URL del back se configura en el archivo .env
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 // Así viene cada plan en la lista que manda el back
 export type PlanSummary = {
@@ -68,5 +69,35 @@ export async function likePlan(planId: string, userId: string) {
   if (!response.ok) {
     const data = await response.json();
     throw new Error(data.message || "No se pudo dar me gusta");
+  }
+}
+
+export type NewPlan = {
+  name: string;
+  description: string;
+  estimatedPrice: number;
+  estimatedTime: number;
+  recommendations: string;
+  address: string;
+  image: string;
+  userId: string;
+};
+
+export async function createPlan(plan: NewPlan): Promise<void> {
+  const response = await fetch(`${API_URL}/plans`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(plan),
+  });
+
+  if (!response.ok) {
+    let message = "No se pudo publicar el plan";
+    try {
+      const data = await response.json();
+      if (typeof data.message === "string") message = data.message;
+    } catch {
+      // El servidor puede responder sin un cuerpo JSON.
+    }
+    throw new Error(message);
   }
 }

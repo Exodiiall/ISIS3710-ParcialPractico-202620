@@ -29,8 +29,8 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="flex-1 flex flex-col items-center justify-center bg-slate-50">
-      <h1 className="text-5xl font-bold text-slate-900 mt-6">{t.title}</h1>
+    <main className="flex-1 flex flex-col items-center justify-center bg-slate-50 px-4 py-10">
+      <h1 className="text-3xl sm:text-5xl font-bold text-slate-900 mt-6">{t.title}</h1>
       <p className="text-lg text-slate-600 mt-2">
         {t.subtitle}
       </p>
@@ -67,7 +67,7 @@ export default function LoginPage() {
           className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 mt-1 outline-none"
         />
 
-        {error && <p className="text-sm text-red-600 mt-4">{error}</p>}
+        {error && <p role="alert" className="text-sm text-red-700 mt-4">{error}</p>}
 
         <button
           type="submit"
@@ -76,6 +76,6 @@ export default function LoginPage() {
           {t.submit}
         </button>
       </form>
-    </div>
+    </main>
   );
 }

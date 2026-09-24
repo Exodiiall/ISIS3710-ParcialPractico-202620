@@ -23,11 +23,11 @@ export default function UserMenu() {
   // Si hay un id guardado, el usuario inició sesión
   if (session.id) {
     return (
-      <div className="flex items-center gap-6">
-        <button className="bg-blue-600 text-white text-lg font-semibold rounded-xl px-6 py-3">
+      <div className="flex flex-wrap items-center gap-3 sm:gap-6">
+        <Link href={`/${lang}/plans/new`} className="bg-blue-700 text-white text-lg font-semibold rounded-xl px-6 py-3">
           {t.createPlan}
-        </button>
-        <div className="flex items-center gap-3 border-l border-slate-200 pl-6">
+        </Link>
+        <div className="flex items-center gap-2 border-l border-slate-200 pl-3 sm:gap-3 sm:pl-6">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -42,9 +42,9 @@ export default function UserMenu() {
               d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
             />
           </svg>
-          <span className="text-lg text-slate-700">{session.username}</span>
+          <span className="max-w-32 truncate text-sm text-slate-700 sm:text-lg">{session.username}</span>
         </div>
-        <button onClick={handleLogout} title={t.logout} className="text-slate-500">
+        <button type="button" onClick={handleLogout} title={t.logout} aria-label={t.logout} className="text-slate-700 p-2">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -65,7 +65,7 @@ export default function UserMenu() {
   }
 
   return (
-    <div className="flex items-center gap-4">
+    <div className="flex flex-wrap items-center gap-4">
       <Link href={`/${lang}/auth/login`} className="text-lg text-slate-700">
         {t.login}
       </Link>
